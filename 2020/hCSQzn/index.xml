@@ -1,0 +1,44 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Journals on ~iany/blog</title>
+    <link>https://blog.iany.me/journal/</link>
+    <description>Recent content in Journals on ~iany/blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Except where otherwise noted, content on this site is licensed under CC-BY-SA</copyright>
+    <lastBuildDate>Sun, 09 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://blog.iany.me/journal/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <link>https://blog.iany.me/journal/2019/08/what-i-touched-this-week-2019-08-11/</link>
+      <title>What I Touched This Week 2019-08-11</title>
+    </item>
+    <item>
+      <link>https://blog.iany.me/journal/2019/08/what-i-touched-this-week-2019-08-18/</link>
+      <title>What I Touched This Week 2019-08-18</title>
+    </item>
+    <item>
+      <link>https://blog.iany.me/journal/2019/09/what-i-touched-this-week-2019-09-08/</link>
+      <title>What I Touched This Week 2019-09-08</title>
+    </item>
+    <item>
+      <link>https://blog.iany.me/journal/2019/12/what-i-touched-this-week-2019-12-22/</link>
+      <title>What I Touched This Week 2019-12-22</title>
+    </item>
+    <item>
+      <link>https://blog.iany.me/journal/2020/01/what-i-touched-this-week-2020-01-19/</link>
+      <title>What I Touched This Week 2020-01-19</title>
+    </item>
+    <item>
+      <link>https://blog.iany.me/journal/2020/01/what-i-touched-this-week-2020-01-26/</link>
+      <title>What I Touched This Week 2020-01-26</title>
+    </item>
+    <item>
+      <link>https://blog.iany.me/journal/2020/02/what-i-touched-this-week-2020-02-02/</link>
+      <title>What I Touched This Week 2020-02-02</title>
+    </item>
+    <item>
+      <link>https://blog.iany.me/journal/2020/02/what-i-touched-this-week-2020-02-09/</link>
+      <title>What I Touched This Week 2020-02-09</title>
+    </item>
+  </channel>
+</rss>
