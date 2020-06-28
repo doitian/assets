@@ -32,7 +32,7 @@ jobs:
     - name: backup assets
       run: |
         TS="$(date "+%s")"
-        DAYS="$(date --date="@$TS" "%-d")"
+        DAYS="$(date --date="@$TS" "+%-d")"
         TS=$(( TS - DAYS * 3600 * 24 ))
         FOLDER="$(date --date="@$TS" "+%Y%m")"
         coscmd download -r uploads/$FOLDER $FOLDER
