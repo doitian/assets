@@ -1,0 +1,40 @@
+name: Backup Bucket
+on:
+  push:
+    branches:
+      - trigger
+  schedule:
+    - cron:  '0 0 2 * *'
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    name: Backup Bucket
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: install coscmd
+      run: pip install coscmd -U
+
+    - name: configure coscmd
+      env:
+        GPG_PASSPHRASE: "${{ secrets.GPG_PASSPHRASE }}"
+      run:
+        gpg --quiet --batch --yes --decrypt --passphrase="$GPG_PASSPHRASE" --output $HOME/.cos.conf .github/files/cos.conf.gpg
+
+    - name: backup assets
+      run: |
+        TS="$(date "+%s")"
+        DAYS="$(date --date="@$TS" "%-d")"
+        TS=$(( TS - DAYS * 3600 * 24 ))
+        FOLDER="$(date --date="@$TS" "+%Y%m")"
+        coscmd download -r uploads/$FOLDER $FOLDER
+
+    - name: push
+      run: |
+        git add .
+        git push
