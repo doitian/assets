@@ -38,7 +38,8 @@ jobs:
         coscmd download -r uploads/$FOLDER $FOLDER
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -m "Backup uploads/$FOLDER" -a
+        git add .
+        git commit -m "Backup uploads/$FOLDER"
 
     - name: push changes
       uses: ad-m/github-push-action@master
