@@ -1,6 +1,11 @@
 name: Backup Bucket
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      extraFolders:
+        description: 'Extra folders to download'
+        required: false
+        default: ''
   schedule:
     - cron:  '0 0 2 * *'
 
@@ -28,16 +33,24 @@ jobs:
         gpg --quiet --batch --yes --decrypt --passphrase="$GPG_PASSPHRASE" --output $HOME/.cos.conf .github/files/cos.conf.gpg
 
     - name: backup assets
+      env:
+        EXTRA_FOLDERS: "${{ github.event.inputs.extraFolders }}"
       run: |
         TS="$(date "+%s")"
         DAYS="$(date --date="@$TS" "+%-d")"
         TS=$(( TS - DAYS * 3600 * 24 ))
         FOLDER="$(date --date="@$TS" "+%Y%m")"
         coscmd download -r uploads/$FOLDER $FOLDER
+        if [ -n "$EXTRA_FOLDERS" ]; then
+          for EXTRA_FOLDER in $EXTRA_FOLDERS; do
+            coscmd download -r uploads/$EXTRA_FOLDER $EXTRA_FOLDER
+          done
+        fi
+        
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add .
-        git commit -m "Backup uploads/$FOLDER"
+        git commit -m "Backup uploads/$FOLDER $EXTRA_FOLDERS"
 
     - name: push changes
       uses: ad-m/github-push-action@master
