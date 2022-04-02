@@ -40,7 +40,7 @@ jobs:
         DAYS="$(date --date="@$TS" "+%-d")"
         TS=$(( TS - DAYS * 3600 * 24 ))
         FOLDER="$(date --date="@$TS" "+%Y%m")"
-        coscmd download -r uploads/$FOLDER $FOLDER
+        coscmd download -f -r uploads/$FOLDER $FOLDER
         if [ -n "$EXTRA_FOLDERS" ]; then
           for EXTRA_FOLDER in $EXTRA_FOLDERS; do
             coscmd download -r uploads/$EXTRA_FOLDER $EXTRA_FOLDER
