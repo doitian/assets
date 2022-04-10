@@ -6,13 +6,15 @@ on:
         description: 'Extra folders to download'
         required: false
         default: ''
-  schedule:
-    - cron:  '0 0 2 * *'
+
+  issue_comment:
+    types: [ created ]
 
 jobs:
   backup:
     runs-on: ubuntu-latest
     name: Backup Bucket
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.comment.user.login == 'doitian' && contains(github.event.comment.body, '/backup') ) }}
     steps:
     - uses: actions/checkout@v2
       with:
