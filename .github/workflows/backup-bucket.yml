@@ -30,9 +30,9 @@ jobs:
 
     - name: configure coscmd
       env:
-        GPG_PASSPHRASE: "${{ secrets.GPG_PASSPHRASE }}"
+        COS_CONF: "${{ secrets.COS_CONF }}"
       run:
-        gpg --quiet --batch --yes --decrypt --passphrase="$GPG_PASSPHRASE" --output $HOME/.cos.conf .github/files/cos.conf.gpg
+        echo "$COS_CONF" > $HOME/.cos.conf
 
     - name: backup assets
       env:
