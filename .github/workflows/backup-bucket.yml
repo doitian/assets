@@ -21,38 +21,44 @@ jobs:
         persist-credentials: false
         ref: master
 
-    - uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
+    - name: install rclone
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y rclone
 
-    - name: install coscmd
-      run: pip install coscmd -U
-
-    - name: configure coscmd
+    - name: configure rclone
       env:
-        COS_CONF: "${{ secrets.COS_CONF }}"
-      run:
-        echo "$COS_CONF" > $HOME/.cos.conf
+        R2_ACCESS_KEY_ID: "${{ secrets.R2_ACCESS_KEY_ID }}"
+        R2_SECRET_ACCESS_KEY: "${{ secrets.R2_SECRET_ACCESS_KEY }}"
+        R2_ENDPOINT: "${{ secrets.R2_ENDPOINT }}"
+      run: |
+        mkdir -p "$HOME/.config/rclone"
+        rclone config create r2 s3 \
+          provider Cloudflare \
+          access_key_id "$R2_ACCESS_KEY_ID" \
+          secret_access_key "$R2_SECRET_ACCESS_KEY" \
+          endpoint "$R2_ENDPOINT"
 
     - name: backup assets
       env:
         EXTRA_FOLDERS: "${{ github.event.inputs.extraFolders }}"
+        R2_BUCKET: "${{ secrets.R2_BUCKET }}"
       run: |
         TS="$(date "+%s")"
         DAYS="$(date --date="@$TS" "+%-d")"
         TS=$(( TS - DAYS * 3600 * 24 ))
         FOLDER="$(date --date="@$TS" "+%Y%m")"
-        coscmd download -f -r uploads/$FOLDER $FOLDER
+        rclone copy "r2:$R2_BUCKET/uploads/$FOLDER" "$FOLDER" || true
         if [ -n "$EXTRA_FOLDERS" ]; then
           for EXTRA_FOLDER in $EXTRA_FOLDERS; do
-            coscmd download -r uploads/$EXTRA_FOLDER $EXTRA_FOLDER
+            rclone copy "r2:$R2_BUCKET/uploads/$EXTRA_FOLDER" "$EXTRA_FOLDER" || true
           done
         fi
         
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add .
-        git commit -m "Backup uploads/$FOLDER $EXTRA_FOLDERS"
+        git commit -m "Backup uploads/$FOLDER $EXTRA_FOLDERS" || true
 
     - name: push changes
       uses: ad-m/github-push-action@master
